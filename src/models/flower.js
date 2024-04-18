@@ -7,6 +7,7 @@ const flowerSchema = mongoose.Schema({
   imageURL: { type: String, required: true },
   isAnnual: { type: Boolean, default: true },
   price: { type: String, required: true },
+  userId: { type: String, required: true },
 });
 
 export default mongoose.model("Flower", flowerSchema);

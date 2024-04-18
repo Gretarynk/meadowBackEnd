@@ -23,4 +23,34 @@ const SIGN_IN = async (req, res) => {
     return res.status(500).json({ message: "Error happened" });
   }
 };
-export {SIGN_IN}
+const LOG_IN = async (req, res) => {
+  try {
+    const user = await UserModel.findOne({ email: req.body.email });
+
+    if (!user) {
+      return res.status(400).json({ message: "Invalid credentials" });
+    }
+    const isPasswordMatch = bcrypt.compareSync(
+      req.body.password,
+      user.password
+    );
+    if (!isPasswordMatch) {
+      return res.status(400).json({ message: "Invalid credentials" });
+    }
+    const jwt_token = jwt.sign(
+      {
+        email: user.email,
+        user_id: user.id,
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: "24h" }
+    );
+    return res
+      .status(200)
+      .json({ message: "User logged", jwt_token: jwt_token });
+  } catch (err) {
+    console.log("HANDLED ERROR:", err);
+    return res.status(500).json({ message: "Error happened" });
+  }
+};
+export { SIGN_IN, LOG_IN };

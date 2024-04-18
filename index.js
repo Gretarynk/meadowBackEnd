@@ -6,7 +6,7 @@ import userRouter from "./src/routers/user.js";
 import cors from "cors";
 const app = express();
 
-app.use(cors);
+app.use(cors());
 app.use(express.json());
 
 mongoose
@@ -16,8 +16,8 @@ mongoose
     console.log("err:", err);
   });
 
-// app.use(flowerRouter);
-// app.use(userRouter);
+app.use(flowerRouter);
+app.use(userRouter);
 
 app.use((req, res) => {
   return res.status(404).json({ message: "This endpoint does not exist" });
